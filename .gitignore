@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Виртуальное окружение
+venv/
+ENV/
+env/
+
+# Переменные окружения
+.env
+
+# Редактор/IDE
+.vscode/
+.idea/
