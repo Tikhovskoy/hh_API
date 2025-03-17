@@ -7,7 +7,6 @@ from typing import Optional, Dict
 import logging
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 
 def get_language_statistics_hh(language: str, area: int = 1, date_from: Optional[str] = None) -> Dict[str, int]:
@@ -18,12 +17,9 @@ def get_language_statistics_hh(language: str, area: int = 1, date_from: Optional
     return calculate_statistics(vacancies, predict_rub_salary_hh, vacancies_found)
 
 
-def get_language_statistics_sj(language: str,
-                               town: int = TOWN_MOSCOW_ID,
-                               catalogues: int = CATALOGUE_PROGRAMMING) -> Dict[str, int]:
+def get_language_statistics_sj(language: str, town: int = TOWN_MOSCOW_ID, catalogues: int = CATALOGUE_PROGRAMMING) -> Dict[str, int]:
     query: str = f"Программист {language}"
-    data = get_superjob_vacancies(query, town=town, catalogues=catalogues,
-                                  count=SUPERJOB_DEFAULT_COUNT, page=0)
+    data = get_superjob_vacancies(query, town=town, catalogues=catalogues, count=SUPERJOB_DEFAULT_COUNT, page=0)
     vacancies_found: int = data.get("total", 0)
     vacancies = get_all_superjob_vacancies(query, town=town, catalogues=catalogues)
     return calculate_statistics(vacancies, predict_rub_salary_sj, vacancies_found)
@@ -44,9 +40,10 @@ def main() -> None:
                                     "Обработано вакансий", "Средняя зарплата"])
     logger.info("\n")
     print_statistics_table(sj_stats, title="SuperJob Moscow",
-                           headers=["Язык программирования", "Вакансий найдено",
-                                    "Вакансий обработано", "Средняя зарплата"])
+                           headers=["Язык программирования", "Ваксий найдено",
+                                    "Ваксий обработано", "Средняя зарплата"])
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     main()

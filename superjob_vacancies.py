@@ -6,7 +6,6 @@ import logging
 from typing import Dict, List, Any
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 
 def get_language_statistics_sj(language: str,
@@ -21,8 +20,7 @@ def get_language_statistics_sj(language: str,
     :return: Словарь со статистикой (найдено вакансий, обработано, средняя зарплата).
     """
     query: str = f"Программист {language}"
-    data: Dict[str, Any] = get_superjob_vacancies(query, town=town, catalogues=catalogues,
-                                                  count=SUPERJOB_DEFAULT_COUNT, page=0)
+    data: Dict[str, Any] = get_superjob_vacancies(query, town=town, catalogues=catalogues, count=SUPERJOB_DEFAULT_COUNT, page=0)
     vacancies_found: int = data.get("total", 0)
     vacancies: List[Dict[str, Any]] = get_all_superjob_vacancies(query, town=town, catalogues=catalogues)
     return calculate_statistics(vacancies, predict_rub_salary_sj, vacancies_found)
@@ -40,4 +38,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import logging
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     main()

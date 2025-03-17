@@ -6,7 +6,6 @@ import logging
 from typing import Optional, Dict, Any, List
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 # Сессионный объект для переиспользования соединений
 session = requests.Session()
