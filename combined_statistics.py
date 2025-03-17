@@ -1,7 +1,7 @@
 from hh_api import get_all_hh_vacancies
 from superjob_api import get_all_superjob_vacancies
 from salary import predict_rub_salary_hh, predict_rub_salary_sj
-from config import HH_DEFAULT_PER_PAGE, TOWN_MOSCOW_ID, CATALOGUE_PROGRAMMING, SUPERJOB_DEFAULT_COUNT
+from config import TOWN_MOSCOW_ID, CATALOGUE_PROGRAMMING
 from statistics_utils import calculate_statistics, print_statistics_table
 from typing import Optional, Dict
 import logging
@@ -20,20 +20,20 @@ def get_language_statistics_sj(language: str, town: int = TOWN_MOSCOW_ID, catalo
 
 def main() -> None:
     languages = ["Python", "C", "C#", "C++", "Java", "JS", "Ruby", "Go", "1С"]
-
-    # Статистика для HeadHunter
     hh_statistics = {lang: get_language_statistics_hh(lang, area=1) for lang in languages}
-
-    # Статистика для SuperJob
     sj_statistics = {lang: get_language_statistics_sj(lang) for lang in languages}
 
-    print_statistics_table(hh_statistics, title="HeadHunter Moscow",
-                           headers=["Язык программирования", "Найдено вакансий",
-                                    "Обработано вакансий", "Средняя зарплата"])
+    print_statistics_table(
+        hh_statistics,
+        title="HeadHunter Moscow",
+        headers=["Язык программирования", "Найдено вакансий", "Обработано вакансий", "Средняя зарплата"]
+    )
     logger.info("\n")
-    print_statistics_table(sj_statistics, title="SuperJob Moscow",
-                           headers=["Язык программирования", "Ваксий найдено",
-                                    "Ваксий обработано", "Средняя зарплата"])
+    print_statistics_table(
+        sj_statistics,
+        title="SuperJob Moscow",
+        headers=["Язык программирования", "Ваксий найдено", "Ваксий обработано", "Средняя зарплата"]
+    )
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
