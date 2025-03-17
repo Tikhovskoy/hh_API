@@ -1,5 +1,4 @@
 import requests
-from requests.exceptions import RequestException
 from config import HH_API_BASE_URL, HH_DEFAULT_PER_PAGE
 import logging
 from typing import Optional, Dict, Any, List
@@ -12,13 +11,14 @@ def get_hh_vacancies(query: str, area: int = 1, per_page: int = HH_DEFAULT_PER_P
                      page: int = 0, date_from: Optional[str] = None) -> Dict[str, Any]:
     """
     Выполняет запрос к API HeadHunter для получения вакансий по заданному запросу.
-
+    
     :param query: Строка запроса (например, "Программист Python").
     :param area: Код региона (по умолчанию 1).
     :param per_page: Количество вакансий на странице.
     :param page: Номер страницы запроса.
     :param date_from: Опциональная дата для фильтрации вакансий.
-    :return: Словарь с данными от API или пустой словарь при ошибке.
+    :return: Словарь с данными от API.
+    :raises: requests.RequestException, если запрос не удался.
     """
     request_params = {
         "text": query,
@@ -28,18 +28,14 @@ def get_hh_vacancies(query: str, area: int = 1, per_page: int = HH_DEFAULT_PER_P
     }
     if date_from:
         request_params["date_from"] = date_from
-    try:
-        response = session.get(HH_API_BASE_URL, params=request_params, timeout=10)
-        response.raise_for_status()
-        return response.json()
-    except RequestException as error:
-        logger.error(f"Ошибка при запросе HH API (страница {page}): {error}")
-        return {}
+    response = session.get(HH_API_BASE_URL, params=request_params, timeout=10)
+    response.raise_for_status()
+    return response.json()
 
 def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
-
+    
     :param query: Строка запроса (например, "Программист Python").
     :param area: Код региона.
     :param date_from: Опциональная дата для фильтрации вакансий.
@@ -57,8 +53,11 @@ def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = N
 
 def main():
     logger.info("Получение вакансий с HH API")
-    vacancies_data = get_hh_vacancies("Программист Python")
-    logger.info("Полученные вакансии: %s", vacancies_data)
+    try:
+        vacancies_data = get_hh_vacancies("Программист Python")
+        logger.info("Полученные вакансии: %s", vacancies_data)
+    except Exception as error:
+        logger.error("Ошибка при получении вакансий: %s", error)
 
 if __name__ == '__main__':
     main()
