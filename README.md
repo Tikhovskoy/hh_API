@@ -16,6 +16,11 @@
 | `combined_statistics.py`    | Сбор и вывод объединённой статистики по вакансиям с обоих сайтов. |
 | `hh_vacancies.py`           | Сбор и вывод вакансий с HeadHunter.                         |
 | `superjob_vacancies.py`     | Сбор и вывод вакансий с SuperJob.                           |
+| `hh_api.py`                 | Запросы к API HeadHunter для получения данных о вакансиях. |
+| `superjob_api.py`           | Запросы к API SuperJob для получения данных о вакансиях.   |
+| `salary.py`                 | Функции расчёта ожидаемой зарплаты.                        |
+| `statistics_utils.py`       | Вспомогательные функции для расчёта и отображения статистики. |
+| `config.py`                 | Конфигурационный файл с параметрами API и настройками.     |
 
 ## Описание файлов проекта
 
@@ -117,3 +122,16 @@ python superjob_vacancies.py
 ├── superjob_vacancies.py
 └── combined_statistics.py
 ```
+
+## Примеры запуска
+
+Запуск сбора данных по конкретному языку программирования:
+
+```bash
+python hh_vacancies.py --language Python
+```
+
+```bash
+python superjob_vacancies.py --language JavaScript
+```
+
