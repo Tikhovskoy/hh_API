@@ -7,7 +7,6 @@ from typing import Optional, Dict, Any, List
 
 logger = logging.getLogger(__name__)
 
-# Сессионный объект для переиспользования соединений
 session = requests.Session()
 
 
@@ -54,7 +53,6 @@ def get_all_superjob_vacancies(keyword: str, town: int = TOWN_MOSCOW_ID,
                                   count=SUPERJOB_DEFAULT_COUNT, page=0)
     vacancies = data.get("objects", [])
     total_vacancies = data.get("total", 0)
-    # Вычисляем общее количество страниц
     pages = (total_vacancies // SUPERJOB_DEFAULT_COUNT) + (1 if total_vacancies % SUPERJOB_DEFAULT_COUNT else 0)
     logger.info(f"SuperJob API: '{keyword}' – найдено страниц: {pages}")
     for current_page in range(1, pages):
@@ -63,3 +61,11 @@ def get_all_superjob_vacancies(keyword: str, town: int = TOWN_MOSCOW_ID,
         logger.info(f"SuperJob API: Загружаем страницу {current_page} из {pages}")
         vacancies.extend(data_page.get("objects", []))
     return vacancies
+
+def main():
+    logger.info("Получение вакансий с SuperJob API")
+    vacancies = get_superjob_vacancies("Программист Python")
+    logger.info("Полученные вакансии: %s", vacancies)
+
+if __name__ == '__main__':
+    main()

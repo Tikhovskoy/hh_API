@@ -5,10 +5,7 @@ import logging
 from typing import Optional, Dict, Any, List
 
 logger = logging.getLogger(__name__)
-# Настройка логирования
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-# Сессионный объект для переиспользования соединений
 session = requests.Session()
 
 
@@ -40,7 +37,6 @@ def get_hh_vacancies(query: str, area: int = 1, per_page: int = HH_DEFAULT_PER_P
         logger.error(f"Ошибка при запросе HH API (страница {page}): {e}")
         return {}
 
-
 def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
@@ -60,3 +56,11 @@ def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = N
         logger.info(f"HH API: Загружаем страницу {current_page} из {total_pages}")
         vacancies.extend(data_page.get("items", []))
     return vacancies
+
+def main():
+    logger.info("Получение вакансий с HH API")
+    vacancies = get_hh_vacancies("Программист Python")
+    logger.info("Полученные вакансии: %s", vacancies)
+
+if __name__ == '__main__':
+    main()
