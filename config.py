@@ -1,8 +1,4 @@
 import os
-from dotenv import load_dotenv
-
-# Загружаем переменные окружения из файла .env.
-load_dotenv()
 
 # Ключи и URL для API
 SUPERJOB_API_KEY: str = os.getenv("SUPERJOB_API_KEY")
