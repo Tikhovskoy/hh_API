@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 session = requests.Session()
 
-
 def get_hh_vacancies(query: str, area: int = 1, per_page: int = HH_DEFAULT_PER_PAGE,
                      page: int = 0, date_from: Optional[str] = None) -> Dict[str, Any]:
     """
@@ -21,20 +20,20 @@ def get_hh_vacancies(query: str, area: int = 1, per_page: int = HH_DEFAULT_PER_P
     :param date_from: Опциональная дата для фильтрации вакансий.
     :return: Словарь с данными от API или пустой словарь при ошибке.
     """
-    params = {
+    request_params = {
         "text": query,
         "area": area,
         "per_page": per_page,
         "page": page
     }
     if date_from:
-        params["date_from"] = date_from
+        request_params["date_from"] = date_from
     try:
-        response = session.get(HH_API_BASE_URL, params=params, timeout=10)
+        response = session.get(HH_API_BASE_URL, params=request_params, timeout=10)
         response.raise_for_status()
         return response.json()
-    except RequestException as e:
-        logger.error(f"Ошибка при запросе HH API (страница {page}): {e}")
+    except RequestException as error:
+        logger.error(f"Ошибка при запросе HH API (страница {page}): {error}")
         return {}
 
 def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -46,21 +45,20 @@ def get_all_hh_vacancies(query: str, area: int = 1, date_from: Optional[str] = N
     :param date_from: Опциональная дата для фильтрации вакансий.
     :return: Список вакансий (каждая вакансия – словарь).
     """
-    data = get_hh_vacancies(query, area=area, per_page=HH_DEFAULT_PER_PAGE, page=0, date_from=date_from)
-    vacancies = data.get("items", [])
-    total_pages = data.get("pages", 0)
+    first_page_response = get_hh_vacancies(query, area=area, per_page=HH_DEFAULT_PER_PAGE, page=0, date_from=date_from)
+    vacancies_list = first_page_response.get("items", [])
+    total_pages = first_page_response.get("pages", 0)
     logger.info(f"HH API: '{query}' – найдено страниц: {total_pages}")
     for current_page in range(1, total_pages):
-        data_page = get_hh_vacancies(query, area=area, per_page=HH_DEFAULT_PER_PAGE, page=current_page,
-                                     date_from=date_from)
+        page_response = get_hh_vacancies(query, area=area, per_page=HH_DEFAULT_PER_PAGE, page=current_page, date_from=date_from)
         logger.info(f"HH API: Загружаем страницу {current_page} из {total_pages}")
-        vacancies.extend(data_page.get("items", []))
-    return vacancies
+        vacancies_list.extend(page_response.get("items", []))
+    return vacancies_list
 
 def main():
     logger.info("Получение вакансий с HH API")
-    vacancies = get_hh_vacancies("Программист Python")
-    logger.info("Полученные вакансии: %s", vacancies)
+    vacancies_data = get_hh_vacancies("Программист Python")
+    logger.info("Полученные вакансии: %s", vacancies_data)
 
 if __name__ == '__main__':
     main()
