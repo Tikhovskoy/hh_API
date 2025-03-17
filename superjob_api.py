@@ -2,7 +2,7 @@ import requests
 from config import (SUPERJOB_API_KEY, SUPERJOB_API_BASE_URL, TOWN_MOSCOW_ID,
                     CATALOGUE_PROGRAMMING, SUPERJOB_DEFAULT_COUNT)
 import logging
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -33,20 +33,25 @@ def get_superjob_vacancies(keyword: str, town: int = TOWN_MOSCOW_ID, catalogues:
     response.raise_for_status()
     return response.json()
 
-def get_all_superjob_vacancies(keyword: str, town: int = TOWN_MOSCOW_ID,
-                               catalogues: int = CATALOGUE_PROGRAMMING) -> List[Dict[str, Any]]:
-    first_response = get_superjob_vacancies(keyword, town=town, catalogues=catalogues,
-                                            count=SUPERJOB_DEFAULT_COUNT, page=0)
+def get_all_superjob_vacancies(keyword: str, town: int = TOWN_MOSCOW_ID, catalogues: int = CATALOGUE_PROGRAMMING) -> Tuple[List[Dict[str, Any]], int]:
+    """
+    Загружает все вакансии по заданному запросу с использованием пагинации.
+    
+    :param keyword: Строка запроса (например, "Программист Python").
+    :param town: Код города.
+    :param catalogues: Код каталога вакансий.
+    :return: Кортеж: (список вакансий, общее количество найденных вакансий).
+    """
+    first_response = get_superjob_vacancies(keyword, town=town, catalogues=catalogues, count=SUPERJOB_DEFAULT_COUNT, page=0)
     vacancies = first_response.get("objects", [])
-    total_vacancies = first_response.get("total", 0)
-    pages = (total_vacancies // SUPERJOB_DEFAULT_COUNT) + (1 if total_vacancies % SUPERJOB_DEFAULT_COUNT else 0)
+    vacancies_found = first_response.get("total", 0)
+    pages = (vacancies_found // SUPERJOB_DEFAULT_COUNT) + (1 if vacancies_found % SUPERJOB_DEFAULT_COUNT else 0)
     logger.info(f"SuperJob API: '{keyword}' – найдено страниц: {pages}")
     for current_page in range(1, pages):
-        page_response = get_superjob_vacancies(keyword, town=town, catalogues=catalogues,
-                                               count=SUPERJOB_DEFAULT_COUNT, page=current_page)
+        page_response = get_superjob_vacancies(keyword, town=town, catalogues=catalogues, count=SUPERJOB_DEFAULT_COUNT, page=current_page)
         logger.info(f"SuperJob API: Загружаем страницу {current_page} из {pages}")
         vacancies.extend(page_response.get("objects", []))
-    return vacancies
+    return vacancies, vacancies_found
 
 def main():
     logger.info("Получение вакансий с SuperJob API")
