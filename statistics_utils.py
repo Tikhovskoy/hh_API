@@ -4,7 +4,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 def calculate_statistics(
     vacancies: List[Dict[str, Any]],
     salary_func: Callable[[Dict[str, Any]], Optional[float]],
@@ -24,16 +23,15 @@ def calculate_statistics(
     processed = 0
     for vacancy in vacancies:
         salary = salary_func(vacancy)
-        if salary is not None:
+        if salary:
             total_salary += salary
             processed += 1
-    average_salary = int(total_salary / processed) if processed > 0 else 0
+    average_salary = int(total_salary / processed) if processed else 0
     return {
         "vacancies_found": total_vacancies,
         "vacancies_processed": processed,
         "average_salary": average_salary
     }
-
 
 def print_statistics_table(
     stats: Dict[str, Dict[str, int]],
@@ -47,7 +45,7 @@ def print_statistics_table(
     :param title: Заголовок таблицы.
     :param headers: Опциональный список заголовков (если не указан, используются стандартные).
     """
-    if headers is None:
+    if not headers:
         headers = ["Язык программирования", "Вакансий найдено", "Вакансий обработано", "Средняя зарплата"]
     table_data = [headers]
     for language, data in stats.items():

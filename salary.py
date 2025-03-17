@@ -13,11 +13,11 @@ def predict_salary(salary_from: Optional[float], salary_to: Optional[float]) -> 
     :param salary_to: Максимальное значение зарплаты.
     :return: Предсказанная зарплата или None.
     """
-    if salary_from is not None and salary_to is not None:
+    if salary_from and salary_to:
         return (salary_from + salary_to) / 2.0
-    elif salary_from is not None:
+    elif salary_from:
         return salary_from * 1.2
-    elif salary_to is not None:
+    elif salary_to:
         return salary_to * 0.8
     else:
         return None
