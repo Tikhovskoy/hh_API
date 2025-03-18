@@ -15,6 +15,7 @@ def get_config():
         "CATALOGUE_PROGRAMMING": 48,
         "HH_DEFAULT_PER_PAGE": 100,
         "SUPERJOB_DEFAULT_COUNT": 100,
+        "HH_DEFAULT_AREA": 1,
     }
 
     if not config["SUPERJOB_API_KEY"]:

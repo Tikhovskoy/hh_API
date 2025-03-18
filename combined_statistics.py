@@ -28,9 +28,16 @@ def main() -> None:
         raise ValueError("Ошибка: SUPERJOB_API_KEY не найден в конфиге")
 
     languages = ["Python", "C", "C#", "C++", "Java", "JS", "Ruby", "Go", "1С"]
-    hh_statistics = {lang: get_language_statistics_hh(lang, area=1) for lang in languages}
+    hh_statistics = {
+        lang: get_language_statistics_hh(lang, area=config_data["HH_DEFAULT_AREA"])
+        for lang in languages
+    }
     sj_statistics = {
-        lang: get_language_statistics_sj(api_key, lang, config_data["TOWN_MOSCOW_ID"], config_data["CATALOGUE_PROGRAMMING"])
+        lang: get_language_statistics_sj(
+            api_key, lang,
+            config_data["TOWN_MOSCOW_ID"],
+            config_data["CATALOGUE_PROGRAMMING"]
+        )
         for lang in languages
     }
 
