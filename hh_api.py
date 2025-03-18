@@ -64,20 +64,3 @@ def get_all_hh_vacancies(query: str, area: Optional[int] = None, date_from: Opti
         vacancies.extend(page_response.get("items", []))
 
     return vacancies, vacancies_found
-
-def main():
-    """
-    Основная функция для получения данных о вакансиях.
-    """
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    
-    logger.info("Получение вакансий с HH API")
-    
-    try:
-        vacancies_data = get_hh_vacancies("Программист Python")
-        logger.info("Полученные вакансии: %s", vacancies_data)
-    except Exception as error:
-        logger.error("Ошибка при получении вакансий: %s", error)
-
-if __name__ == '__main__':
-    main()

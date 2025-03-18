@@ -53,23 +53,3 @@ def get_all_superjob_vacancies(api_key: str, keyword: str, town: Optional[int] =
         vacancies.extend(page_response.get("objects", []))
 
     return vacancies, vacancies_found
-
-def main():
-    """
-    Основная функция для получения вакансий с SuperJob API.
-    """
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
-    api_key = CONFIG["SUPERJOB_API_KEY"]
-    if not api_key:
-        raise ValueError("Ошибка: SUPERJOB_API_KEY не найден в конфиге")
-
-    logger.info("Получение вакансий с SuperJob API")
-    try:
-        vacancies = get_superjob_vacancies(api_key, "Программист Python")
-        logger.info("Полученные вакансии: %s", vacancies)
-    except Exception as error:
-        logger.error("Ошибка при получении вакансий: %s", error)
-
-if __name__ == '__main__':
-    main()
