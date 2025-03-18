@@ -34,6 +34,22 @@
 - `superjob_vacancies.py` — скрипт получения вакансий с SuperJob.
 - `combined_statistics.py` — скрипт сбора общей статистики по обоим сайтам.
 
+## Описание переменных конфигурации (`config.py`)
+
+| Переменная                 | Описание                                                    |
+|----------------------------|-------------------------------------------------------------|
+| `SUPERJOB_API_KEY`         | API-ключ для доступа к сервису SuperJob.                     |
+| `SUPERJOB_API_BASE_URL`    | Базовый URL API SuperJob.                                   |
+| `HH_API_BASE_URL`          | Базовый URL для API HeadHunter.                             |
+| `TOWN_MOSCOW_ID`           | ID Москвы в HeadHunter.                                     |
+| `SUPERJOB_DEFAULT_CITY`    | ID Москвы в SuperJob.                                       |
+| `CATALOGUE_PROGRAMMING`    | ID категории "Программирование" на SuperJob.                |
+| `HH_DEFAULT_PER_PAGE`      | Число вакансий на страницу для запроса HeadHunter.          |
+| `SUPERJOB_DEFAULT_COUNT`   | Число вакансий на страницу в SuperJob.                      |
+| `HH_DEFAULT_AREA`          | Код региона по умолчанию для HeadHunter (Москва).           |
+| `DEFAULT_LANGUAGES`        | Список языков программирования для поиска вакансий.         |
+| `DEFAULT_TOP_VACANCIES`    | Число популярных вакансий для анализа.                      |
+
 ## Стек технологий
 
 - Python 3.8+
