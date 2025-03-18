@@ -56,18 +56,18 @@ def get_all_hh_vacancies(query: str, area: Optional[int] = None, date_from: Opti
         area = config_data["HH_DEFAULT_AREA"]
 
     first_page_response = get_hh_vacancies(query, area=area, per_page=per_page, page=0, date_from=date_from)
-    vacancies_list = first_page_response.get("items", [])
+    vacancies = first_page_response.get("items", [])
     vacancies_found = first_page_response.get("found", 0)
     total_pages = first_page_response.get("pages", 0)
-    
+
     logger.info(f"HH API: '{query}' – найдено страниц: {total_pages}")
-    
+
     for current_page in range(1, total_pages):
         page_response = get_hh_vacancies(query, area=area, per_page=per_page, page=current_page, date_from=date_from)
         logger.info(f"HH API: Загружаем страницу {current_page} из {total_pages}")
-        vacancies_list.extend(page_response.get("items", []))
-    
-    return vacancies_list, vacancies_found
+        vacancies.extend(page_response.get("items", []))
+
+    return vacancies, vacancies_found
 
 def main():
     """

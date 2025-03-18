@@ -11,13 +11,13 @@ logger = logging.getLogger(__name__)
 
 def get_language_statistics_hh(language: str, area: int = 1, date_from: Optional[str] = None) -> Dict[str, int]:
     query = f"Программист {language}"
-    vacancies_list, vacancies_found = get_all_hh_vacancies(query, area=area, date_from=date_from)
-    return calculate_statistics(vacancies_list, predict_rub_salary_hh, vacancies_found)
+    vacancies, vacancies_found = get_all_hh_vacancies(query, area=area, date_from=date_from)
+    return calculate_statistics(vacancies, predict_rub_salary_hh, vacancies_found)
 
 def get_language_statistics_sj(api_key: str, language: str, town: int, catalogues: int) -> Dict[str, int]:
     query = f"Программист {language}"
-    vacancies_list, vacancies_found = get_all_superjob_vacancies(api_key, query, town=town, catalogues=catalogues)
-    return calculate_statistics(vacancies_list, predict_rub_salary_sj, vacancies_found)
+    vacancies, vacancies_found = get_all_superjob_vacancies(api_key, query, town=town, catalogues=catalogues)
+    return calculate_statistics(vacancies, predict_rub_salary_sj, vacancies_found)
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")

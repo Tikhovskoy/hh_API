@@ -48,14 +48,14 @@ def get_all_superjob_vacancies(api_key: str, keyword: str, town: Optional[int] =
     vacancies = first_response.get("objects", [])
     vacancies_found = first_response.get("total", 0)
     pages = (vacancies_found // config_data["SUPERJOB_DEFAULT_COUNT"]) + (1 if vacancies_found % config_data["SUPERJOB_DEFAULT_COUNT"] else 0)
-    
+
     logger.info(f"SuperJob API: '{keyword}' – найдено страниц: {pages}")
 
     for current_page in range(1, pages):
         page_response = get_superjob_vacancies(api_key, keyword, town=town, catalogues=catalogues, count=config_data["SUPERJOB_DEFAULT_COUNT"], page=current_page)
         logger.info(f"SuperJob API: Загружаем страницу {current_page} из {pages}")
         vacancies.extend(page_response.get("objects", []))
-    
+
     return vacancies, vacancies_found
 
 def main():
