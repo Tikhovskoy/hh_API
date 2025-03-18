@@ -17,23 +17,15 @@ def main() -> None:
 
     languages = CONFIG["DEFAULT_LANGUAGES"]
 
-    hh_statistics = {
-        lang: calculate_statistics(
-            get_all_hh_vacancies(f"Программист {lang}", area=CONFIG["HH_DEFAULT_AREA"])[0],
-            predict_rub_salary_hh,
-            get_all_hh_vacancies(f"Программист {lang}", area=CONFIG["HH_DEFAULT_AREA"])[1],
-        )
-        for lang in languages
-    }
+    hh_statistics = {}
+    sj_statistics = {}
 
-    sj_statistics = {
-        lang: calculate_statistics(
-            get_all_superjob_vacancies(api_key, f"Программист {lang}", CONFIG["SUPERJOB_DEFAULT_CITY"], CONFIG["CATALOGUE_PROGRAMMING"])[0],
-            predict_rub_salary_sj,
-            get_all_superjob_vacancies(api_key, f"Программист {lang}", CONFIG["SUPERJOB_DEFAULT_CITY"], CONFIG["CATALOGUE_PROGRAMMING"])[1],
-        )
-        for lang in languages
-    }
+    for lang in languages:
+        hh_vacancies, hh_vacancies_found = get_all_hh_vacancies(f"Программист {lang}", area=CONFIG["HH_DEFAULT_AREA"])
+        sj_vacancies, sj_vacancies_found = get_all_superjob_vacancies(api_key, f"Программист {lang}", CONFIG["SUPERJOB_DEFAULT_CITY"], CONFIG["CATALOGUE_PROGRAMMING"])
+
+        hh_statistics[lang] = calculate_statistics(hh_vacancies, predict_rub_salary_hh, hh_vacancies_found)
+        sj_statistics[lang] = calculate_statistics(sj_vacancies, predict_rub_salary_sj, sj_vacancies_found)
 
     print_statistics_table(
         hh_statistics,

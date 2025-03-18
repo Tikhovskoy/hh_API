@@ -54,7 +54,7 @@ def get_all_hh_vacancies(query: str, area: Optional[int] = None, date_from: Opti
     first_page_response = get_hh_vacancies(query, area=area, per_page=per_page, page=0, date_from=date_from)
     vacancies = first_page_response.get("items", [])
     vacancies_found = first_page_response.get("found", 0)
-    total_pages = first_page_response.get("pages", 0)
+    total_pages = first_page_response.get("pages", 1)
 
     logger.info(f"HH API: '{query}' – найдено страниц: {total_pages}")
 
