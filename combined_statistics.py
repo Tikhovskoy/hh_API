@@ -20,6 +20,8 @@ def get_language_statistics_sj(api_key: str, language: str, town: int, catalogue
     return calculate_statistics(vacancies_list, predict_rub_salary_sj, vacancies_found)
 
 def main() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    
     config_data = config.get_config()
     api_key = config_data.get("SUPERJOB_API_KEY")
     if not api_key:
@@ -45,5 +47,4 @@ def main() -> None:
     )
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     main()

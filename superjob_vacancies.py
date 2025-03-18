@@ -20,6 +20,8 @@ def main():
     """
     Основная функция получения и вывода статистики вакансий с SuperJob для заданных языков программирования.
     """
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    
     config_data = config.get_config()
     api_key = config_data.get("SUPERJOB_API_KEY")
     if not api_key:
@@ -36,5 +38,4 @@ def main():
     print_statistics_table(stats, title="SuperJob Moscow")
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     main()
