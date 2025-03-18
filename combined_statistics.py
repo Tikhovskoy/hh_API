@@ -23,20 +23,19 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     
     config_data = config.get_config()
-    api_key = config_data.get("SUPERJOB_API_KEY")
+    api_key = config_data["SUPERJOB_API_KEY"]
+
     if not api_key:
         raise ValueError("Ошибка: SUPERJOB_API_KEY не найден в конфиге")
 
-    languages = ["Python", "C", "C#", "C++", "Java", "JS", "Ruby", "Go", "1С"]
+    languages = config_data["DEFAULT_LANGUAGES"]
     hh_statistics = {
         lang: get_language_statistics_hh(lang, area=config_data["HH_DEFAULT_AREA"])
         for lang in languages
     }
     sj_statistics = {
         lang: get_language_statistics_sj(
-            api_key, lang,
-            config_data["TOWN_MOSCOW_ID"],
-            config_data["CATALOGUE_PROGRAMMING"]
+            api_key, lang, config_data["SUPERJOB_DEFAULT_CITY"], config_data["CATALOGUE_PROGRAMMING"]
         )
         for lang in languages
     }

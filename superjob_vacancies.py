@@ -17,23 +17,20 @@ def get_language_statistics_sj(api_key: str, language: str, town: int, catalogue
     return calculate_statistics(vacancies, predict_rub_salary_sj, vacancies_found)
 
 def main():
-    """
-    Основная функция получения и вывода статистики вакансий с SuperJob для заданных языков программирования.
-    """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    
+
     config_data = config.get_config()
-    api_key = config_data.get("SUPERJOB_API_KEY")
+    api_key = config_data["SUPERJOB_API_KEY"]
     if not api_key:
-        raise ValueError("Ошибка: SUPERJOB_API_KEY не найден конфиге")
-    
-    languages: List[str] = ["Python", "Java", "JavaScript", "C++", "C#", "PHP", "Ruby", "Go", "1С"]
-    stats: Dict[str, Dict[str, int]] = {}
-    
-    for language in languages:
-        stats[language] = get_language_statistics_sj(
-            api_key, language, config_data["TOWN_MOSCOW_ID"], config_data["CATALOGUE_PROGRAMMING"]
+        raise ValueError("Ошибка: SUPERJOB_API_KEY не найден в конфиге")
+
+    languages = config_data["DEFAULT_LANGUAGES"]
+    stats = {
+        lang: get_language_statistics_sj(
+            api_key, lang, config_data["SUPERJOB_DEFAULT_CITY"], config_data["CATALOGUE_PROGRAMMING"]
         )
+        for lang in languages
+    }
     
     print_statistics_table(stats, title="SuperJob Moscow")
 
