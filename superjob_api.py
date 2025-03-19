@@ -2,15 +2,15 @@ import requests
 import logging
 import math
 from typing import Dict, Any, List, Tuple
-from config import CONFIG
+import config
 
 logger = logging.getLogger(__name__)
 session = requests.Session()
 
 def get_superjob_vacancies(api_key: str, keyword: str,
-                            town: int = CONFIG["SUPERJOB_DEFAULT_CITY"],
-                            catalogues: int = CONFIG["CATALOGUE_PROGRAMMING"],
-                            count: int = CONFIG["SUPERJOB_DEFAULT_COUNT"],
+                            town: int = config.SUPERJOB_DEFAULT_CITY,
+                            catalogues: int = config.CATALOGUE_PROGRAMMING,
+                            count: int = config.SUPERJOB_DEFAULT_COUNT,
                             page: int = 0) -> Dict[str, Any]:
     """
     Выполняет запрос к API SuperJob для получения вакансий по заданному запросу.
@@ -33,13 +33,13 @@ def get_superjob_vacancies(api_key: str, keyword: str,
         "page": page
     }
 
-    response = session.get(CONFIG["SUPERJOB_API_BASE_URL"], headers=headers, params=params, timeout=10)
+    response = session.get(config.SUPERJOB_API_BASE_URL, headers=headers, params=params, timeout=10)
     response.raise_for_status()
     return response.json()
 
 def get_all_superjob_vacancies(api_key: str, keyword: str,
-                               town: int = CONFIG["SUPERJOB_DEFAULT_CITY"],
-                               catalogues: int = CONFIG["CATALOGUE_PROGRAMMING"]) -> Tuple[List[Dict[str, Any]], int]:
+                               town: int = config.SUPERJOB_DEFAULT_CITY,
+                               catalogues: int = config.CATALOGUE_PROGRAMMING) -> Tuple[List[Dict[str, Any]], int]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
 
@@ -53,7 +53,7 @@ def get_all_superjob_vacancies(api_key: str, keyword: str,
     vacancies = first_response.get("objects", [])
     vacancies_found = first_response.get("total", 0)
 
-    pages = math.ceil(vacancies_found / CONFIG["SUPERJOB_DEFAULT_COUNT"])
+    pages = math.ceil(vacancies_found / config.SUPERJOB_DEFAULT_COUNT)
 
     logger.info(f"SuperJob API: '{keyword}' – найдено страниц: {pages}")
 
