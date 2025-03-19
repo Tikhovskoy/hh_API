@@ -11,7 +11,8 @@ def get_superjob_vacancies(api_key: str, keyword: str,
                             town: int = config.SUPERJOB_DEFAULT_CITY,
                             catalogues: int = config.CATALOGUE_PROGRAMMING,
                             count: int = config.SUPERJOB_DEFAULT_COUNT,
-                            page: int = 0) -> Dict[str, Any]:
+                            page: int = 0
+                            ) -> Dict[str, Any]:
     """
     Выполняет запрос к API SuperJob для получения вакансий по заданному запросу.
 
@@ -38,8 +39,9 @@ def get_superjob_vacancies(api_key: str, keyword: str,
     return response.json()
 
 def get_all_superjob_vacancies(api_key: str, keyword: str,
-                               town: int = config.SUPERJOB_DEFAULT_CITY,
-                               catalogues: int = config.CATALOGUE_PROGRAMMING) -> Tuple[List[Dict[str, Any]], int]:
+                                town: int = config.SUPERJOB_DEFAULT_CITY,
+                                catalogues: int = config.CATALOGUE_PROGRAMMING
+                                ) -> Tuple[List[Dict[str, Any]], int]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
 

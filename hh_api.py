@@ -6,8 +6,10 @@ import config
 logger = logging.getLogger(__name__)
 session = requests.Session()
 
-def get_hh_vacancies(query: str, area: Optional[int] = None, per_page: Optional[int] = None,
-                     page: int = 0, date_from: Optional[str] = None) -> Dict[str, Any]:
+def get_hh_vacancies(query: str, area: int = config.HH_DEFAULT_AREA, 
+                    per_page: int = config.HH_DEFAULT_PER_PAGE,
+                    page: int = 0, date_from: Optional[str] = None
+                    ) -> Dict[str, Any]:
     """
     Выполняет запрос к API HeadHunter для получения вакансий по заданному запросу.
     
@@ -19,11 +21,6 @@ def get_hh_vacancies(query: str, area: Optional[int] = None, per_page: Optional[
     :return: Словарь с данными от API.
     :raises: requests.RequestException, если запрос не удался.
     """
-    if area is None:
-        area = config.HH_DEFAULT_AREA
-    if per_page is None:
-        per_page = config.HH_DEFAULT_PER_PAGE
-
     request_params = {
         "text": query,
         "area": area,
@@ -38,8 +35,9 @@ def get_hh_vacancies(query: str, area: Optional[int] = None, per_page: Optional[
     response.raise_for_status()
     return response.json()
 
-def get_all_hh_vacancies(query: str, area: Optional[int] = None, date_from: Optional[str] = None) -> Tuple[List[Dict[str, Any]], int]:
-
+def get_all_hh_vacancies(query: str, area: int = config.HH_DEFAULT_AREA, 
+                        date_from: Optional[str] = None
+                        ) -> Tuple[List[Dict[str, Any]], int]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
     
@@ -49,8 +47,6 @@ def get_all_hh_vacancies(query: str, area: Optional[int] = None, date_from: Opti
     :return: Кортеж: (список вакансий, общее количество найденных вакансий).
     """
     per_page = config.HH_DEFAULT_PER_PAGE
-    if area is None:
-        area = config.HH_DEFAULT_AREA
 
     first_page_response = get_hh_vacancies(query, area=area, per_page=per_page, page=0, date_from=date_from)
     vacancies = first_page_response.get("items", [])
