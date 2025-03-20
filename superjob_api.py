@@ -40,7 +40,8 @@ def get_superjob_vacancies(api_key: str, keyword: str,
 
 def get_all_superjob_vacancies(api_key: str, keyword: str,
                                 town: int = config.SUPERJOB_DEFAULT_CITY,
-                                catalogues: int = config.CATALOGUE_PROGRAMMING
+                                catalogues: int = config.CATALOGUE_PROGRAMMING,
+                                count: int = config.SUPERJOB_DEFAULT_COUNT
                                 ) -> Tuple[List[Dict[str, Any]], int]:
     """
     Загружает все вакансии по заданному запросу с использованием пагинации.
@@ -51,17 +52,18 @@ def get_all_superjob_vacancies(api_key: str, keyword: str,
     :param catalogues: Код каталога профессий (по умолчанию "Программирование").
     :return: Кортеж (список вакансий, общее количество найденных вакансий).
     """
-    first_response = get_superjob_vacancies(api_key, keyword, town=town, catalogues=catalogues)
-    vacancies = first_response.get("objects", [])
-    vacancies_found = first_response.get("total", 0)
+    vacancies = []
+    page = 0
+    response = get_superjob_vacancies(api_key, keyword, town=town, catalogues=catalogues, count=count, page=page)
+    vacancies.extend(response.get("objects", []))
+    vacancies_found = response.get("total", 0)
 
-    pages = math.ceil(vacancies_found / config.SUPERJOB_DEFAULT_COUNT)
+    logger.info(f"SuperJob API: '{keyword}' – найдено вакансий: {vacancies_found}")
 
-    logger.info(f"SuperJob API: '{keyword}' – найдено страниц: {pages}")
-
-    for current_page in range(1, pages):
-        page_response = get_superjob_vacancies(api_key, keyword, town=town, catalogues=catalogues, page=current_page)
-        logger.info(f"SuperJob API: Загружаем страницу {current_page} из {pages}")
-        vacancies.extend(page_response.get("objects", []))
+    while response.get("more"):
+        page += 1
+        response = get_superjob_vacancies(api_key, keyword, town=town, catalogues=catalogues, count=count, page=page)
+        logger.info(f"SuperJob API: Загружаем страницу {page}")
+        vacancies.extend(response.get("objects", []))
 
     return vacancies, vacancies_found
