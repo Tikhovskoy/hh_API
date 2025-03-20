@@ -1,4 +1,3 @@
-SUPERJOB_API_KEY = ""
 SUPERJOB_API_BASE_URL = "https://api.superjob.ru/2.0/vacancies/"
 HH_API_BASE_URL = "https://api.hh.ru/vacancies"
 TOWN_MOSCOW_ID = 4

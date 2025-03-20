@@ -4,11 +4,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def calculate_statistics(
-    vacancies: List[Dict[str, Any]],
-    salary_func: Callable[[Dict[str, Any]], Optional[float]],
-    total_vacancies: int
-) -> Dict[str, int]:
+def calculate_statistics(vacancies: List[Dict[str, Any]],
+                        salary_func: Callable[[Dict[str, Any]], Optional[float]],
+                        total_vacancies: int
+                        ) -> Dict[str, int]:
     """
     Вычисляет статистику по списку вакансий:
     - Количество обработанных вакансий (где удалось вычислить зарплату)
@@ -33,11 +32,10 @@ def calculate_statistics(
         "average_salary": average_salary
     }
 
-def print_statistics_table(
-    stats: Dict[str, Dict[str, int]],
-    title: str,
-    headers: Optional[List[str]] = None
-) -> None:
+def print_statistics_table(stats: Dict[str, Dict[str, int]],
+                            title: str,
+                            headers: Optional[List[str]] = None
+                            ) -> None:
     """
     Выводит статистику вакансий в виде ASCII-таблицы.
 
